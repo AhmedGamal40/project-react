@@ -1,4 +1,7 @@
 import { useForm } from "react-hook-form";
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export default function Register() {
     const { register, handleSubmit,watch,formState:{errors} } = useForm();
@@ -10,7 +13,18 @@ export default function Register() {
   const passwordMatch = (value) => {
     return value === password || "Passwords do not match";
   }
-    
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  function handleConfirmPassword() {
+    setShowConfirmPassword(!showConfirmPassword);
+  }
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  function handleTogglePassword() {
+    setShowPassword(!showPassword);
+  }
+
     return (
         <>
         <div className="bg-dark">
@@ -64,10 +78,24 @@ export default function Register() {
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Password</label>
-                            <input type="password" 
-                            className="form-control" 
-                            {...register('password',{required: true,minLength : 8 , pattern:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/})}
-                            placeholder="Enter password" />
+                            <div className="input-group">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    className="form-control"
+                                    id="password"
+                                    name="password"
+                                    {...register('password',{required: true,minLength : 8 , pattern:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/})}
+                                    placeholder="Confirm password"
+                                    
+                                />
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-secondary"
+                                    onClick={handleTogglePassword}
+                                >
+                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                </button>
+                                </div>
                             <div id="emailHelp" className="form-text text-danger">
                             <small className="form-text text-danger">
                               {errors.password?.type ==='minLength' && " Your password must be at least 8 characters long"} 
@@ -78,101 +106,45 @@ export default function Register() {
                         </div>
                         <div className="mb-3">
                             <label  className="form-label">Confirm Password</label>
-                            <input type="password" 
-                            className="form-control"
-                            {...register('confirm',{ required: true, minLength: 8, validate: passwordMatch })}
-                            placeholder="Confirm password"
-                            />
-                            <div id="emailHelp" className="form-text text-danger">
-                            <small className="form-text text-danger">
-                              {errors.confirm?.type ==='validate' && " Passwords do not match"}
-                            </small>
+                            <div className="input-group">
+                                <input
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    className="form-control"
+                                    id="password"
+                                    name="password"
+                                    {...register('confirm',{ required: true, minLength: 8, validate: passwordMatch })}
+                                    placeholder="Confirm password"
+                                    
+                                />
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-secondary"
+                                    onClick={handleConfirmPassword}
+                                >
+                                    <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                                </button>
+                                </div>
+                             <div id="emailHelp" className="form-text text-danger">
+                             <small className="form-text text-danger">
+                               {errors.confirm?.type ==='validate' && " Passwords do not match"}
+                             </small>
+                             </div>
                             </div>
-                        </div>
-                        <div className="d-grid gap-2">
-                            <button type="submit" className="btn btn-primary">Register</button>
-                        </div>
-                        </form>
-                    </div>
-                    <div className="card-footer text-center">
-                        <h6 className="mb-0">Already have account! <a href="/login">Login</a></h6>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
-  </>
+                         <div className="d-grid gap-2">
+                             <button type="submit" className="btn btn-primary">Register</button>
+                         </div>
+                         
+                         </form>
+                     </div>
+                     <div className="card-footer text-center">
+                         <h6 className="mb-0">Already have account! <a href="/login">Login</a></h6>
+                     </div>
+                     </div>
+                 </div>
+                 </div>
+             </div>
+         </div>
+    </>
                 
     )
 }
-
-
-// const [ regForm , setForm ] = useState({
-    //     name: "",
-    //     email: '',
-    //     username: '',
-    //     password: '',
-    //     confirmPassword: '',
-
-    // });
-
-
-    // const [ regFormErrors , setFormErrors ] = useState({
-    //     nameError: null,
-    //     emailError: null,
-    //     usernameError: null,
-    //     passwordError: null,
-    //     confirmPasswordError: null,
-
-    // });
-
-    // const handleChange = (e) => {
-    //     // const { name, value } = e.target;
-    //     // setForm({ ...regForm, [name]: value });
-    //     // console.log(e.target.name ,e.target.value)
-    //    switch (e.target.name){
-    //     case 'name' :
-    //         setForm({
-    //             ...regForm,
-    //             name: e.target.value
-    //         })
-
-    //         setFormErrors({
-    //             ...regFormErrors,
-    //             nameError :e.target.value
-    //         })
-    //         break;
-    //     case 'username' :
-    //         setForm({
-    //             ...regForm,
-    //             username: e.target.value
-    //         })
-    //         break;
-    //     case 'email' :
-    //         setForm({
-    //             ...regForm,
-    //             email: e.target.value
-    //         })
-    //         break;
-    //     case 'password' :
-    //         setForm({
-    //             ...regForm,
-    //             password: e.target.value
-    //         })
-    //         break; 
-    //     case 'confirmPassword' :
-    //         setForm({
-    //             ...regForm,
-    //             confirmPassword: e.target.value
-    //         })
-    //         default:
-    //             break;
-
-    //    }
-    //   };
-
-    //   const handleSubmit = (e) => { // used to stop refresh button
-    //     e.preventDefault();
-    //     console.log(regForm)
-    //   }
